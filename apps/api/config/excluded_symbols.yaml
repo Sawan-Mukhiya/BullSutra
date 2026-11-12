@@ -1,0 +1,11 @@
+excluded_types:
+  - mutual_fund
+  - debenture
+  - promoter
+  - government_bond
+excluded_suffixes:
+  - MF
+  - F1
+  - BD
+  - D85
+  - P

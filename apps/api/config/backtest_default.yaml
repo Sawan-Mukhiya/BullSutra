@@ -1,0 +1,22 @@
+universe: pit_universe        # "pit_universe" = dynamic monthly universe from universe_membership
+start_date: null              # null = earliest date allowed by signals and folds
+end_date: null                # null = latest date with prices
+train_days: 750               # trading days in each training window
+test_days: 120
+step_days: 120                # equals test_days: test windows are contiguous
+embargo_days: 10              # trading days between train end and test start
+horizon: 10                   # forward horizon in trading days for outcomes
+initial_capital: 1000000      # NPR
+max_positions: 10
+slippage_bps: 20
+execution: next_open          # next_open | next_close
+min_calibrated_confidence: 0.10   # entry filter for strategy "full"
+rf_annual: 0.05
+apply_taxes: true
+stop_loss_pct: null
+strategies: [tech_only, fund_only, news_only, consensus_basic, consensus_weighted, consensus_debate, full]
+benchmarks: [bh_equal_weight, bh_nepse_index]
+bootstrap_samples: 2000
+bootstrap_block: 10
+seed: 42
+logic_version: null           # null = current LOGIC_VERSION

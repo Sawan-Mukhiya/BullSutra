@@ -1,0 +1,45 @@
+"""Constants for the Agent layer."""
+from datetime import date
+from bullsutra.core.constants import (
+    TZ_NAME,
+    NPT,
+    TRADING_DAYS_PER_YEAR,
+    CIRCUIT_LIMIT_PCT,
+    SIGNAL_CUTOFF_HOUR,
+    SIGNAL_CUTOFF_MINUTE,
+    MIN_BARS_SIGNALS,
+    MIN_BARS_RISK,
+    LABEL_THRESHOLD,
+    FORWARD_HORIZON_DAYS,
+    MIN_ACTIVE_CONF,
+    MIN_TOTAL_CONF,
+    DEBATE_TAU,
+    DEBATE_MAX_ROUNDS,
+    DEBATE_KAPPA,
+    DEBATE_CONF_DECAY,
+    RISK_GATE_THRESHOLD,
+    ILLIQUID_FLAG_THRESHOLD,
+    WEIGHT_ETA,
+    WEIGHT_FLOOR,
+    WEIGHT_MIN_SAMPLES,
+    WEIGHT_WINDOW,
+    OUTCOME_MIN_ABS_SCORE,
+    CALIBRATION_MIN_SAMPLES,
+    NEWS_WINDOW_DAYS,
+    NEWS_DECAY_DAYS,
+    NEWS_PRIOR,
+    NEWS_SATURATION,
+    UNIVERSE_SIZE,
+    DISCLAIMER_TEXT,
+)
+
+LOGIC_VERSION = "1.0.0"
+GRAPH_VERSION = "1.0.0"
+PROMPT_VERSION = "v1"
+
+# Default agent weights
+DEFAULT_WEIGHTS = {
+    "news": 1.0,
+    "fundamentals": 1.0,
+    "technicals": 1.0,
+}

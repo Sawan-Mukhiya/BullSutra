@@ -1,0 +1,10 @@
+sharesansar:
+  base_url: "https://www.sharesansar.com"
+  listing_urls: ["https://www.sharesansar.com/category/latest"]
+  max_pages_live: 2
+  source_weight: 1.0
+bizmandu:
+  base_url: "https://bizmandu.com"
+  listing_urls: ["https://bizmandu.com/"]
+  max_pages_live: 2
+  source_weight: 1.0

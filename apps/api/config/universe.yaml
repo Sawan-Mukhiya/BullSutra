@@ -1,0 +1,4 @@
+universe_size: 40
+presence_min_pct: 0.90
+ranking_window_sessions: 250
+ranking_metric: median_turnover

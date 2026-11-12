@@ -1,0 +1,5 @@
+min_interval: 0.6
+enable_nepsepy_floorsheet: false
+max_retries: 4
+backoff_factor: 2.0
+timeout_seconds: 30

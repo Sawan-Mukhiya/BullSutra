@@ -1,0 +1,3 @@
+ledger_formula: B1
+event_tolerance_pct: 0.002
+return_outlier_threshold_pct: 0.5

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BullSutra Brief - {{ brief.symbol }}</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 20mm;
+    @bottom-center {
+      content: "{{ disclaimer }} | Brief ID: {{ brief.id }}";
+      font-size: 7pt;
+      color: #6b7280;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1f2937;
+    margin: 0;
+    padding: 0;
+    font-size: 9pt;
+    line-height: 1.4;
+  }
+  .header {
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .wordmark {
+    font-size: 20pt;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.5px;
+  }
+  .meta-sub {
+    color: #4b5563;
+    font-size: 10pt;
+    margin-top: 4px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14pt;
+    color: #ffffff;
+  }
+  .badge-buy { background-color: #16a34a; }
+  .badge-hold { background-color: #d97706; }
+  .badge-sell { background-color: #dc2626; }
+  .confidence {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 4px;
+    text-align: right;
+  }
+  h2 {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 4px;
+    margin-top: 14px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+  }
+  th, td {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #4b5563;
+    font-size: 8pt;
+  }
+  ul {
+    margin: 4px 0 12px 18px;
+    padding: 0;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  .severity-high { color: #dc2626; font-weight: 600; }
+  .severity-medium { color: #d97706; font-weight: 600; }
+  .severity-low { color: #2563eb; }
+  .summary-box {
+    background-color: #f9fafb;
+    border-left: 3px solid #3b82f6;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  .footer {
+    margin-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 8px;
+    font-size: 7pt;
+    color: #6b7280;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="wordmark">BullSutra</div>
+    <div class="meta-sub">
+      <strong>{{ brief.symbol }}</strong> &mdash; {{ brief.company_name }} ({{ brief.sector }})<br>
+      As of: <strong>{{ brief.as_of }}</strong> | Generated: {{ brief.meta.generated_at }}
+    </div>
+  </div>
+  <div style="text-align: right;">
+    {% if brief.signal.label == 'BUY' %}
+      <div class="badge badge-buy">BUY</div>
+    {% elif brief.signal.label == 'SELL' %}
+      <div class="badge badge-sell">SELL</div>
+    {% else %}
+      <div class="badge badge-hold">HOLD</div>
+    {% endif %}
+    <div class="confidence">Confidence: {{ "%.1f"|format(brief.signal.confidence * 100) }}%</div>
+  </div>
+</div>
+
+{% if brief.summary %}
+<div class="summary-box">
+  {{ brief.summary }}
+</div>
+{% endif %}
+
+<h2>Specialist Agents</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Agent</th>
+      <th>Score</th>
+      <th>Confidence</th>
+      <th>Key Drivers</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for agent_name in ['news', 'fundamentals', 'technicals', 'risk'] %}
+    {% set sig = brief.agents.get(agent_name) %}
+    {% if sig %}
+    <tr>
+      <td><strong>{{ agent_name|capitalize }}</strong></td>
+      <td>{{ "%.2f"|format(sig.score) }}</td>
+      <td>{{ "%.1f"|format(sig.confidence * 100) }}%</td>
+      <td>
+        {% for d in sig.drivers[:2] %}
+          &bull; {{ d.note }}<br>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Key Drivers</h2>
+<ul>
+  {% for d in brief.drivers[:5] %}
+  <li><strong>[{{ d.kind|capitalize }}]</strong> {{ d.note }}</li>
+  {% endfor %}
+</ul>
+
+{% if brief.risks %}
+<h2>Risks</h2>
+<ul>
+  {% for r in brief.risks %}
+  <li>{{ r }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if brief.risk_flags %}
+<h2>Risk Flags</h2>
+<ul>
+  {% for f in brief.risk_flags %}
+  <li><span class="severity-{{ f.severity }}">[{{ f.severity|upper }}]</span> {{ f.message }} ({{ f.code }})</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if brief.debate and brief.debate.triggered %}
+<h2>Debate Protocol</h2>
+<p>
+  Initial Disagreement: <strong>{{ "%.2f"|format(brief.debate.initial_disagreement) }}</strong> &rarr; 
+  Final Disagreement: <strong>{{ "%.2f"|format(brief.debate.final_disagreement) }}</strong>
+</p>
+{% if brief.debate.cross_checks %}
+<ul>
+  {% for c in brief.debate.cross_checks %}
+  <li>{{ c.message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% if brief.debate.summary %}
+<p>{{ brief.debate.summary }}</p>
+{% endif %}
+{% endif %}
+
+{% if brief.sources %}
+<h2>Sources</h2>
+<ul>
+  {% for s in brief.sources %}
+  <li>
+    <strong>[{{ s.type|capitalize }}]</strong> {{ s.label }}
+    {% if s.published_at %}({{ s.published_at }}){% endif %}
+    {% if s.reported_at %}({{ s.reported_at }}){% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<div class="footer">
+  {{ disclaimer }}<br>
+  Brief ID: {{ brief.id }}
+</div>
+
+</body>
+</html>

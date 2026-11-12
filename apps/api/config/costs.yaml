@@ -1,0 +1,12 @@
+commission_slabs:
+  - [50000, 0.0040]
+  - [500000, 0.0037]
+  - [2000000, 0.0034]
+  - [10000000, 0.0030]
+  - [null, 0.0027]
+commission_min_npr: 10
+sebon_fee_rate: 0.00015
+dp_charge_npr: 25
+cgt_short_rate: 0.075    # holding period <= 365 days
+cgt_long_rate: 0.05      # holding period > 365 days
+min_lot: 10
